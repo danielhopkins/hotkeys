@@ -25,6 +25,9 @@ end
 require("window")
 require("hotkeys")
 
+location = require("location")
+location.startLocation()
+
 --
 -- Window animation duration (seconds)
 --

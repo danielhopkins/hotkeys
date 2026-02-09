@@ -10,7 +10,7 @@ local function windowMenuItem(item)
 end
 
 -- Cycling center: center → small centered → medium centered → large centered → repeat
-local centerPresets = {0.5, 0.7, 0.9}  -- 50%, 70%, 90% of screen
+local centerPresets = {0.7, 0.9, 1.0}  -- 70%, 90%, fullscreen
 local function fuzzyEqual(a, b, tolerance)
     return math.abs(a - b) < (tolerance or 15)
 end
@@ -66,15 +66,8 @@ local function cycleCenter()
 end
 
 -- hotkeys
--- F13-F20 are sent by Karabiner for Hyper+C/F/H/L/J/K (avoids ctrl conflicts in terminals)
-hs.hotkey.bind({}, 'f13', function() cycleCenter() end)
-hs.hotkey.bind({}, 'f16', function()  -- Hyper+F: Fill
-    local win = hs.window.focusedWindow()
-    if win then
-        local screen = win:screen():frame()
-        win:setFrame({x = screen.x, y = screen.y, w = screen.w, h = screen.h}, 0.2)
-    end
-end)
+-- F13-F20 are sent by Karabiner for Hyper+C/H/L/J/K (avoids ctrl conflicts in terminals)
+hs.hotkey.bind({}, 'f13', function() cycleCenter() end)  -- Hyper+C: center 50% → 70% → 90% → full
 hs.hotkey.bind({}, 'f17', function()  -- Hyper+H: Left half (cycles: half → top-left → bottom-left)
     cycleWindowLeft()
 end)
@@ -90,6 +83,16 @@ hs.hotkey.bind({}, 'f20', function()  -- Hyper+K: Top half
     if win then win:moveToUnit({0, 0, 1, 0.5}) end
 end)
 hs.hotkey.bind(hyper, 't', function() hs.toggleConsole() end)
+
+-- Home automation (requires location module)
+hs.hotkey.bind(hyper, 'f3', function()
+    if not location.isHome() then
+        hs.alert.show("Not at home")
+        return
+    end
+    hs.shortcuts.run("Toggle heater")
+    hs.alert.show("Toggling heater", 0.5)
+end)
 
 -- Window Layouts with rotation
 -- hyper+1: 4 quarters - press again to rotate clockwise

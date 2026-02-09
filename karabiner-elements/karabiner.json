@@ -144,16 +144,8 @@
                         ]
                     },
                     {
-                        "description": "Hyper+F/HJKL → F16-F20 (for Hammerspoon window tiling, avoids F14/F15 brightness keys)",
+                        "description": "Hyper+HJKL → F17-F20 (for Hammerspoon window tiling, avoids F14/F15 brightness keys)",
                         "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "f",
-                                    "modifiers": { "mandatory": ["control", "option", "shift", "command"] }
-                                },
-                                "to": [{ "key_code": "f16" }],
-                                "type": "basic"
-                            },
                             {
                                 "from": {
                                     "key_code": "h",
