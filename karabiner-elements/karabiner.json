@@ -144,19 +144,6 @@
                         ]
                     },
                     {
-                        "description": "Opt+Cmd+D → F16 (Hammerspoon dock toggle with window compensation)",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "d",
-                                    "modifiers": { "mandatory": ["option", "command"] }
-                                },
-                                "to": [{ "key_code": "f16" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "Hyper+HJKL → F17-F20 (for Hammerspoon window tiling, avoids F14/F15 brightness keys)",
                         "manipulators": [
                             {

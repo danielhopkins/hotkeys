@@ -82,7 +82,7 @@ hs.hotkey.bind({}, 'f20', function()  -- Hyper+K: Top half
     local win = hs.window.focusedWindow()
     if win then win:moveToUnit({0, 0, 1, 0.5}) end
 end)
-hs.hotkey.bind({}, 'f16', function()  -- Opt+Cmd+D: Toggle dock with window compensation
+hs.hotkey.bind({"cmd", "alt"}, 'd', function()  -- Cmd+Opt+D: Toggle dock with window compensation
     -- Snapshot each window's proportional position within its screen
     local windowProps = {}
     for _, win in ipairs(hs.window.visibleWindows()) do
