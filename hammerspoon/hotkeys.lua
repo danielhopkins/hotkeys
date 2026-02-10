@@ -82,6 +82,53 @@ hs.hotkey.bind({}, 'f20', function()  -- Hyper+K: Top half
     local win = hs.window.focusedWindow()
     if win then win:moveToUnit({0, 0, 1, 0.5}) end
 end)
+hs.hotkey.bind({}, 'f16', function()  -- Opt+Cmd+D: Toggle dock with window compensation
+    -- Snapshot each window's proportional position within its screen
+    local windowProps = {}
+    for _, win in ipairs(hs.window.visibleWindows()) do
+        if win:isStandard() then
+            local sf = win:screen():frame()
+            local wf = win:frame()
+            table.insert(windowProps, {
+                win = win,
+                screenId = win:screen():id(),
+                xRatio = (wf.x - sf.x) / sf.w,
+                yRatio = (wf.y - sf.y) / sf.h,
+                wRatio = wf.w / sf.w,
+                hRatio = wf.h / sf.h,
+                fixedSize = hs.fnutils.contains(centerOnlyApps, win:application():name()),
+                origW = wf.w,
+                origH = wf.h,
+            })
+        end
+    end
+
+    -- Toggle dock auto-hide
+    hs.osascript.applescript('tell application "System Events" to set autohide of dock preferences to not (autohide of dock preferences)')
+
+    -- Wait for dock animation, then reposition windows proportionally
+    hs.timer.doAfter(0.8, function()
+        for _, wp in ipairs(windowProps) do
+            local win = wp.win
+            if win:isVisible() then
+                local sf = win:screen():frame()
+                if wp.fixedSize then
+                    -- Keep original size, re-center proportionally
+                    local newX = sf.x + sf.w * wp.xRatio
+                    local newY = sf.y + sf.h * wp.yRatio
+                    win:setFrame({x = newX, y = newY, w = wp.origW, h = wp.origH}, 0.2)
+                else
+                    win:setFrame({
+                        x = sf.x + sf.w * wp.xRatio,
+                        y = sf.y + sf.h * wp.yRatio,
+                        w = sf.w * wp.wRatio,
+                        h = sf.h * wp.hRatio,
+                    }, 0.2)
+                end
+            end
+        end
+    end)
+end)
 hs.hotkey.bind(hyper, 't', function() hs.toggleConsole() end)
 
 -- Home automation (requires location module)
